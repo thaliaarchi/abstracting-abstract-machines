@@ -32,3 +32,30 @@ Fixpoint nd {A : Type} (n : ND A) : list A :=
   end.
 
 End ND.
+Module NDRec.
+
+Inductive NDRec (I O A : Type) : Type :=
+  | Success (a : A)
+  | Fail
+  | Or (l r : NDRec I O A)
+  | Rec (i : I) (f : O -> NDRec I O A).
+Arguments Success {I O A} _.
+Arguments Fail {I O A}.
+Arguments Or {I O A} _ _.
+Arguments Rec {I O A} _ _.
+
+Reserved Notation "m '>>=' f" (right associativity, at level 60).
+
+Definition ret {I O A : Type} (a : A) : NDRec I O A :=
+  Success a.
+
+Fixpoint bind {I O A B : Type} (m : NDRec I O A) (f : A -> NDRec I O B) : NDRec I O B :=
+  match m with
+  | Success a => f a
+  | Fail => Fail
+  | Or l r => Or (l >>= f) (r >>= f)
+  | Rec i k => Rec i (fun x => k x >>= f)
+  end
+  where "m '>>=' f" := (bind m f).
+
+End NDRec.
