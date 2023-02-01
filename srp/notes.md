@@ -65,3 +65,13 @@ first class in APL and J? That seems like it would be a major shortcoming.
 They say this generalizes the language's computation model from SIMD to MIMD.
 How would their example of applying [sum, length]₂ to a vector, [8, 9, 6]₃, work
 in APL/J without MIMD?
+
+## Discussion
+
+The lambda cube: https://en.wikipedia.org/wiki/Lambda_cube
+
+(+/,#) 8 9 6
+- `+` add
+- `/` insert
+- `,` append
+- `#` tally
