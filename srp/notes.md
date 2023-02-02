@@ -75,3 +75,16 @@ The lambda cube: https://en.wikipedia.org/wiki/Lambda_cube
 - `/` insert
 - `,` append
 - `#` tally
+
+##
+
+Remora is not Turing complete
+
+λ x : τ0 (x x)
+Because x is applied as a function, τ0 = τ2 -> τ3
+Because x is passed as an argument, τ0 = τ2
+Cannot be typed finitely
+
+###
+
+GADTs allow you to do a lot of Dependent ML - Generalized Abstract Data Type
