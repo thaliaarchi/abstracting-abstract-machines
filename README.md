@@ -16,3 +16,5 @@ Models](https://faculty.cs.byu.edu/~kimball/630/) in Coq and Rust.
   Shivers, and Manolios 2014)
   [[ACM](https://dl.acm.org/doi/10.1007/978-3-642-54833-8_3),
   [alternate](https://www.ccs.neu.edu/home/jrslepak/typed-j.pdf)]
+- [dml](dml): Dependent Types in Practical Programming (Xi and Pfenning 1999)
+  [[ACM](https://dl.acm.org/doi/abs/10.1145/292540.292560)]
