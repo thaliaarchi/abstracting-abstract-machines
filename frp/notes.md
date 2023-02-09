@@ -45,3 +45,33 @@ compiler?
 
 Question: Is it guaranteed that old values are deleted at the earliest-possible
 time?
+
+## Discussion
+
+### Issue 1
+
+> Values of •A type are time-dependent, in the sense that their representation
+> changes over time: when the clock ticks, the dataflow graph/store is
+> evaluated, and pointers are updated. This means that they should only be used
+> on particular time steps. Other types, such as natural numbers or booleans,
+> consist of values whose representation does not change over time. These stable
+> values may safely be used at many different times. Values of other types, such
+> as functions A -> B, are either time-dependent or stable, depending on whether
+> or not they capture any time-dependent values in their environment.
+
+### Issue #2
+
+Old values are deleted on the tick they're no longer used. The GC marks values
+as now or later and cleans up all now values.
+
+### Bonus
+
+How does this compare to Adapton?
+- In Adapton, you can't rely on a previous value specifically
+
+Would a stream of natural-number streams emit infinite zeros or be equivalent to
+the stream of natural numbers?
+- If the stream produces fresh natural-number streams upon each emission, it
+  would produce all zeros.
+- If the stream references the same natural-number stream upon each iteration,
+  it would emit the natural numbers.
