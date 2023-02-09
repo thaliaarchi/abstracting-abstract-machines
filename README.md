@@ -17,4 +17,10 @@ Models](https://faculty.cs.byu.edu/~kimball/630/) in Coq and Rust.
   [[ACM](https://dl.acm.org/doi/10.1007/978-3-642-54833-8_3),
   [alternate](https://www.ccs.neu.edu/home/jrslepak/typed-j.pdf)]
 - [dml](dml): Dependent Types in Practical Programming (Xi and Pfenning 1999)
-  [[ACM](https://dl.acm.org/doi/abs/10.1145/292540.292560)]
+  [[ACM](https://dl.acm.org/doi/10.1145/292540.292560)]
+- [frp](frp): Higher-Order Functional Reactive Programming without Spacetime
+  Leaks ([Krishnaswami](https://www.cl.cam.ac.uk/~nk480/) 2013)
+  [[ACM](https://dl.acm.org/doi/10.1145/2544174.2500588),
+  [alternate](https://www.cl.cam.ac.uk/~nk480/simple-frp.pdf),
+  [tech report with proofs](https://www.cl.cam.ac.uk/~nk480/simple-frp-techreport.pdf),
+  [AdjS programming language](https://www.cl.cam.ac.uk/~nk480/adjs-0.1.tgz)]
