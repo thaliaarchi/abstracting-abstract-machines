@@ -56,7 +56,7 @@ class Left a, Right a => Bottom a where
 The appropriate dictionaries are simply passed at run-time and no special
 hashing schemes are required.
 
-Question: Can I express this example with Rust traits?
+Question: Can I express this example with Rust traits? Yes!
 
 ## Conclusion
 

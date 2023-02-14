@@ -1,5 +1,5 @@
 COQ_DIRS := aam fnd cti
-RUST_DIRS := cti
+RUST_DIRS := cti ahp/multiple-supertraits
 
 all: coq rust
 
