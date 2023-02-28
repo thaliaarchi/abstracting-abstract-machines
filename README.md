@@ -26,3 +26,6 @@ Models](https://faculty.cs.byu.edu/~kimball/630/) in Coq and Rust.
   [AdjS programming language](https://www.cl.cam.ac.uk/~nk480/adjs-0.1.tgz)]
 - [ahp](ahp): How to make *ad-hoc* polymorphism less *ad hoc* (Wadler and Blott
   1989) [[ACM](https://dl.acm.org/doi/10.1145/75277.75283)]
+- [bdt](bdt): Bidirectional typing (Dunfield and Krishnaswami 2020)
+  [[ACM](https://dl.acm.org/doi/10.1145/3450952),
+  [arXiv](https://arxiv.org/abs/1908.05839)]
