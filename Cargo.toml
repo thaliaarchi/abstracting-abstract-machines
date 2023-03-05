@@ -3,4 +3,5 @@
 members = [
     "cti",
     "ahp/multiple-supertraits",
+    "coc",
 ]
