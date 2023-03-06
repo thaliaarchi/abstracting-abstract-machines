@@ -16,42 +16,73 @@ pub struct TypeId(u32);
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub struct Var(u32);
 
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub enum Name {
+    Global(String),
+    Local(Var),
+    Quote(Var),
+}
+
+/// Inferrable terms (Term↑)
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub enum TermInf {
+    /// Annotated term: e : τ
+    Ann(Box<TermChk>, Box<Type>),
+    /// Variable: x
+    Bound(Var),
+    /// Variable: x
+    Free(Name),
+    /// Application: e e′
+    App(Box<TermInf>, Box<TermChk>),
+}
+
+/// Checkable terms (Term↓)
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub enum TermChk {
+    /// Embedded inferrable term
+    Inf(Box<TermInf>),
+    /// Lambda abstraction: λx → e
+    Lam(Box<TermChk>),
+}
+
 /// The type language of λ→: τ
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub enum Type {
     /// Base type: α
-    Base(TypeId),
+    Free(Name),
     /// Function type: τ → τ′
-    Func(Box<Type>, Box<Type>),
-}
-
-/// The kinds of terms: e
-#[derive(Clone, Debug, PartialEq, Eq)]
-pub enum Term {
-    /// Annotated term: e : τ
-    Anno(Box<Term>, Box<Type>),
-    /// Variable: x
-    Var(Var),
-    /// Application: e e′
-    App(Box<Term>, Box<Term>),
-    /// Lambda abstraction: λx → e
-    Lam(Var, Box<Term>),
+    Fun(Box<Type>, Box<Type>),
 }
 
 /// Values: v
 #[derive(Clone, Debug, PartialEq, Eq)]
-pub enum Val {
-    /// Neutral term: n ::= x | n v
-    /// (A variable applied to a sequence of values)
-    Neut(Var, Vec<Val>),
+pub enum Value {
+    /// Neutral term: n
+    Neutral(Neutral),
     /// Lambda abstraction: λx → v
-    Lam(Var, Box<Val>),
+    Lam(Box<Value>, Box<Value>),
+}
+
+/// Neutral term: n
+/// (A variable applied to a sequence of values)
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub enum Neutral {
+    /// Variable: x
+    Free(Name),
+    /// Application: n v
+    App(Box<Neutral>, Box<Value>),
+}
+
+impl Value {
+    pub fn free(n: Name) -> Self {
+        Value::Neutral(Neutral::Free(n))
+    }
 }
 
 // Contexts: Γ
 pub struct Ctx {
     /// Adding a type identifier: Γ, α : *
-    pub base_types: HashSet<TypeId>,
+    base_types: HashSet<TypeId>,
     /// Adding a term identifier: Γ, x : τ
-    pub terms: HashMap<Var, Box<Type>>,
+    terms: HashMap<Var, Box<Type>>,
 }
