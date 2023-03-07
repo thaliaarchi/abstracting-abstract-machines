@@ -1,6 +1,5 @@
-
 -- identity and const
-let id    = (\ a x -> x) :: forall (a :: *) . a -> a 
+let id    = (\ a x -> x) :: forall (a :: *) . a -> a
 let const = (\ a b x y -> x) :: forall (a :: *) (b :: *) . a -> b -> a
 
 -- addition of natural numbers
@@ -88,8 +87,8 @@ let voidElim =
                    0 )
   :: forall (m :: Void -> *) (v :: Void) . m v
 
--- type of booleans 
-let Bool = Fin 2 
+-- type of booleans
+let Bool = Fin 2
 -- constructors
 let False = FZero 1
 let True  = FSucc 1 (FZero 0)
@@ -167,7 +166,7 @@ let pNatEqRefl =
     (\ n' rec -> rec)
   :: forall (n :: Nat) . Prop (natEq n n)
 
--- alias for type-level negation 
+-- alias for type-level negation
 let Not = (\ a -> a -> Void) :: * -> *
 
 -- Leibniz prinicple (look at the type signature)
@@ -215,7 +214,7 @@ let p0IsNot1 =
   :: Not (Eq Nat 0 1)
 
 -- proof that zero is not a successor
-let p0IsNoSucc = 
+let p0IsNoSucc =
   natElim
     ( \ n -> Not (Eq Nat 0 (Succ n)) )
     p0IsNot1
@@ -315,5 +314,3 @@ let pNPlus0isN =
           ( Refl Nat 0 )
           ( \ n' rec -> leibniz Nat Nat Succ (plus n' 0) n' rec )
   :: forall n :: Nat . Eq Nat (plus n 0) n
-
-
