@@ -1,5 +1,5 @@
-Require Import List Ascii String DecimalString.
-Import ListNotations.
+Require Import List. Import ListNotations.
+Require Import Ascii String DecimalString.
 Local Open Scope list_scope.
 Local Open Scope string_scope.
 Local Notation "x ::: y" := (String x y)
@@ -200,3 +200,52 @@ Compute sprintf "Hello, %d!" 42%nat.
 Compute sprintf "It's over %d!" 9000%Z.
 
 End Coercions.
+
+Class Show A := mkshow {
+  show : A -> string;
+}.
+
+Require Import Decimal Strings.Byte.
+
+#[export] Instance showString : Show string := {
+  show s := s;
+}.
+#[export] Instance showAscii : Show ascii := {
+  show a := String a "";
+}.
+
+#[export] Instance showInt : Show int := {
+  show := DecimalString.NilZero.string_of_int;
+}.
+#[export] Instance showUint : Show uint := {
+  show := DecimalString.NilZero.string_of_uint;
+}.
+#[export] Instance showNat : Show nat := {
+  show n := showUint.(show) (Nat.to_uint n);
+}.
+#[export] Instance showZ : Show Z := {
+  show x := showInt.(show) (Z.to_int x);
+}.
+#[export] Instance showN : Show N := {
+  show x := showInt.(show) (N.to_int x);
+}.
+#[export] Instance showPositive : Show positive := {
+  show x := showUint.(show) (Pos.to_uint x);
+}.
+#[export] Instance showByte : Show byte := {
+  show b := showN.(show) (Byte.to_N b);
+}.
+
+Module ShowCoercion.
+
+(** * [sprintf] with coercions to Show.
+
+    I'm unsure whether it's possible to coerce a value with inferred typeclass
+    bounds. *)
+
+Variant printable : Type :=
+  | Printable (A : Type) (H : Show A) (a : A).
+
+Arguments Printable {_} {_} _.
+
+End ShowCoercion.
