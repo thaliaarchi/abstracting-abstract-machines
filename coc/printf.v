@@ -86,3 +86,55 @@ Fail Compute sprintf "Hello, %s!" 42.
 Fail Compute sprintf "Hello, %s!" "world" 42.
 
 End LambdaInductive.
+
+Require Import ZArith ZifyClasses DecimalString.
+
+Definition show_zify {A} `{InjTyp A Z} (x : A) : string :=
+  DecimalString.NilZero.string_of_int (Z.to_int (inj x)).
+
+Module Zify.
+
+(** * [sprintf] with polymorphic numbers *)
+
+Variant directive : Type :=
+  | DLit (a : ascii)
+  | DNum
+  | DString.
+
+Definition format : Type := list directive.
+
+Fixpoint format_type (f : format) : Type :=
+  match f with
+  | DLit _ :: f' => format_type f'
+  | DNum :: f' => forall A : Type, InjTyp A Z -> A -> format_type f'
+  | DString :: f' => string -> format_type f'
+  | [] => string
+  end.
+
+Fixpoint parse_format (s : string) : format :=
+  match s with
+  | "%" ::: "d" ::: s' => DNum :: parse_format s'
+  | "%" ::: "s" ::: s' => DString :: parse_format s'
+  | c ::: s' => DLit c :: parse_format s'
+  | "" => []
+  end.
+
+Fixpoint sprintf_ (f : format) (res : string) : format_type f :=
+  match f with
+  | DLit a :: f' => sprintf_ f' (res ++ String a "")
+  | DNum :: f' => fun A (H : InjTyp A Z) (x : A) => sprintf_ f' (res ++ show_zify x)
+  | DString :: f' => fun s : string => sprintf_ f' (res ++ s)
+  | [] => res
+  end.
+
+Definition sprintf (fmt : string) : format_type (parse_format fmt) :=
+  sprintf_ (parse_format fmt) "".
+
+(* Needs arguments for type and prop: *)
+Compute sprintf "It's over %d!" _ _ 9000%Z.
+Compute sprintf "Hello, %d!" _ _ (-42)%Z.
+Compute sprintf "Hello, %d!" _ _ 42%N.
+Compute sprintf "Hello, %d!" _ _ 42%positive.
+Compute sprintf "Hello, %d!" _ _ 42%nat.
+
+End Zify.
