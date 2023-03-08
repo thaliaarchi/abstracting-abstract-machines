@@ -1,14 +1,22 @@
 Require Import List Ascii String DecimalString.
+Import ListNotations.
+Local Open Scope list_scope.
 Local Open Scope string_scope.
 Local Notation "x ::: y" := (String x y)
                             (at level 60, right associativity) : string_scope.
 
-(** * Cayenne-style sprintf
+Definition show_nat (n : nat) : string :=
+  DecimalString.NilZero.string_of_uint (Nat.to_uint n).
 
-    Printf example from “Cayenne — a language with dependent types” (Augustsson
-    1998).
+Module Lambda.
 
-    It fails to typecheck. *)
+(** * [sprintf] with arguments via lambdas
+
+    From example in paper “Cayenne — a language with dependent types” by Lennart
+    Augustsson in 1998.
+
+    It fails to typecheck, because Coq can't guess the decreasing argument and
+    expects an incorrect type. *)
 
 Fixpoint sprintf_type (fmt : string) : Type :=
   match fmt with
@@ -17,9 +25,6 @@ Fixpoint sprintf_type (fmt : string) : Type :=
   | _ ::: fmt' => sprintf_type fmt'
   | "" => string
   end.
-
-Definition show_nat (n : nat) : string :=
-  DecimalString.NilZero.string_of_uint (Nat.to_uint n).
 
 Fail Program Fixpoint sprintf_ (fmt : string) (res : string) : sprintf_type fmt :=
   match fmt with
@@ -30,3 +35,54 @@ Fail Program Fixpoint sprintf_ (fmt : string) (res : string) : sprintf_type fmt 
   end.
 
 Fail Definition sprintf (fmt : string) : sprintf_type fmt := sprintf_ fmt "".
+
+End Lambda.
+Module LambdaInductive.
+
+(** * [sprintf] with arguments via lambdas and format parsed separately
+
+    Idea from article “Type-safe printf in Coq” by Arthur Azevedo de Amorim in
+    2013 (http://poleiro.info/posts/2013-04-19-type-safe-printf-in-coq.html) *)
+
+Variant directive : Type :=
+  | DLit (a : ascii)
+  | DNat
+  | DString.
+
+Definition format : Type := list directive.
+
+Fixpoint format_type (f : format) : Type :=
+  match f with
+  | DLit _ :: f' => format_type f'
+  | DNat :: f' => nat -> format_type f'
+  | DString :: f' => string -> format_type f'
+  | [] => string
+  end.
+
+Fixpoint parse_format (s : string) : format :=
+  match s with
+  | "%" ::: "d" ::: s' => DNat :: parse_format s'
+  | "%" ::: "s" ::: s' => DString :: parse_format s'
+  | c ::: s' => DLit c :: parse_format s'
+  | "" => []
+  end.
+
+Fixpoint sprintf_ (f : format) (res : string) : format_type f :=
+  match f with
+  | DLit a :: f' => sprintf_ f' (res ++ String a "")
+  | DNat :: f' => fun n : nat => sprintf_ f' (res ++ show_nat n)
+  | DString :: f' => fun s : string => sprintf_ f' (res ++ s)
+  | [] => res
+  end.
+
+Definition sprintf (fmt : string) : format_type (parse_format fmt) :=
+  sprintf_ (parse_format fmt) "".
+
+Compute sprintf "Hello!".
+Compute sprintf "Hello, %s!".
+Compute sprintf "Hello, %s!" "world".
+Compute sprintf "Hello, %d!" 42.
+Fail Compute sprintf "Hello, %s!" 42.
+Fail Compute sprintf "Hello, %s!" "world" 42.
+
+End LambdaInductive.
