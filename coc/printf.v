@@ -89,8 +89,11 @@ End LambdaInductive.
 
 Require Import ZArith ZifyClasses DecimalString.
 
+Definition show_Z (x : Z) : string :=
+  DecimalString.NilZero.string_of_int (Z.to_int x).
+
 Definition show_zify {A} `{InjTyp A Z} (x : A) : string :=
-  DecimalString.NilZero.string_of_int (Z.to_int (inj x)).
+  show_Z (inj x).
 
 Module Zify.
 
@@ -131,10 +134,69 @@ Definition sprintf (fmt : string) : format_type (parse_format fmt) :=
   sprintf_ (parse_format fmt) "".
 
 (* Needs arguments for type and prop: *)
-Compute sprintf "It's over %d!" _ _ 9000%Z.
 Compute sprintf "Hello, %d!" _ _ (-42)%Z.
 Compute sprintf "Hello, %d!" _ _ 42%N.
 Compute sprintf "Hello, %d!" _ _ 42%positive.
 Compute sprintf "Hello, %d!" _ _ 42%nat.
+Compute sprintf "It's over %d!" _ _ 9000%Z.
 
 End Zify.
+Module Coercions.
+
+(** * [sprintf] with coercions for a fixed set of types. *)
+
+Definition printable_num : Type := Z.
+Definition printable_string : Type := string.
+
+Definition printable_of_nat n : printable_num := Z.of_nat n.
+Definition printable_of_N x : printable_num := Z.of_N x.
+Definition printable_of_positive x : printable_num := Zpos x.
+Definition printable_of_ascii a : printable_string := String a "".
+Coercion printable_of_nat : nat >-> printable_num.
+Coercion printable_of_N : N >-> printable_num.
+Coercion printable_of_positive : positive >-> printable_num.
+Coercion printable_of_ascii : ascii >-> printable_string.
+
+Variant directive : Type :=
+  | DLit (a : ascii)
+  | DNum
+  | DString.
+
+Definition format : Type := list directive.
+
+Fixpoint format_type (f : format) : Type :=
+  match f with
+  | DLit _ :: f' => format_type f'
+  | DNum :: f' => printable_num -> format_type f'
+  | DString :: f' => printable_string -> format_type f'
+  | [] => string
+  end.
+
+Fixpoint parse_format (s : string) : format :=
+  match s with
+  | "%" ::: "d" ::: s' => DNum :: parse_format s'
+  | "%" ::: "s" ::: s' => DString :: parse_format s'
+  | c ::: s' => DLit c :: parse_format s'
+  | "" => []
+  end.
+
+Fixpoint sprintf_ (f : format) (res : string) : format_type f :=
+  match f with
+  | DLit a :: f' => sprintf_ f' (res ++ String a "")
+  | DNum :: f' => fun x : printable_num => sprintf_ f' (res ++ show_Z x)
+  | DString :: f' => fun s : printable_string => sprintf_ f' (res ++ s)
+  | [] => res
+  end.
+
+Definition sprintf (fmt : string) : format_type (parse_format fmt) :=
+  sprintf_ (parse_format fmt) "".
+
+Compute sprintf "Hello, %s!" "world".
+Compute sprintf "Hello, %s!" "X"%char.
+Compute sprintf "Hello, %d!" (-42)%Z.
+Compute sprintf "Hello, %d!" 42%N.
+Compute sprintf "Hello, %d!" 42%positive.
+Compute sprintf "Hello, %d!" 42%nat.
+Compute sprintf "It's over %d!" 9000%Z.
+
+End Coercions.
