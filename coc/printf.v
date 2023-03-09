@@ -51,14 +51,6 @@ Variant directive : Type :=
 
 Definition format : Type := list directive.
 
-Fixpoint format_type (f : format) : Type :=
-  match f with
-  | DLit _ :: f' => format_type f'
-  | DNat :: f' => nat -> format_type f'
-  | DString :: f' => string -> format_type f'
-  | [] => string
-  end.
-
 Fixpoint parse_format (s : string) : format :=
   match s with
   | "%" ::: "d" ::: s' => DNat :: parse_format s'
@@ -67,7 +59,15 @@ Fixpoint parse_format (s : string) : format :=
   | "" => []
   end.
 
-Fixpoint sprintf_ (f : format) (res : string) : format_type f :=
+Fixpoint sprintf_type (f : format) : Type :=
+  match f with
+  | DLit _ :: f' => sprintf_type f'
+  | DNat :: f' => nat -> sprintf_type f'
+  | DString :: f' => string -> sprintf_type f'
+  | [] => string
+  end.
+
+Fixpoint sprintf_ (f : format) (res : string) : sprintf_type f :=
   match f with
   | DLit a :: f' => sprintf_ f' (res ++ String a "")
   | DNat :: f' => fun n : nat => sprintf_ f' (res ++ show_nat n)
@@ -75,7 +75,7 @@ Fixpoint sprintf_ (f : format) (res : string) : format_type f :=
   | [] => res
   end.
 
-Definition sprintf (fmt : string) : format_type (parse_format fmt) :=
+Definition sprintf (fmt : string) : sprintf_type (parse_format fmt) :=
   sprintf_ (parse_format fmt) "".
 
 Compute sprintf "Hello!".
@@ -106,14 +106,6 @@ Variant directive : Type :=
 
 Definition format : Type := list directive.
 
-Fixpoint format_type (f : format) : Type :=
-  match f with
-  | DLit _ :: f' => format_type f'
-  | DNum :: f' => forall A : Type, InjTyp A Z -> A -> format_type f'
-  | DString :: f' => string -> format_type f'
-  | [] => string
-  end.
-
 Fixpoint parse_format (s : string) : format :=
   match s with
   | "%" ::: "d" ::: s' => DNum :: parse_format s'
@@ -122,7 +114,15 @@ Fixpoint parse_format (s : string) : format :=
   | "" => []
   end.
 
-Fixpoint sprintf_ (f : format) (res : string) : format_type f :=
+Fixpoint sprintf_type (f : format) : Type :=
+  match f with
+  | DLit _ :: f' => sprintf_type f'
+  | DNum :: f' => forall A : Type, InjTyp A Z -> A -> sprintf_type f'
+  | DString :: f' => string -> sprintf_type f'
+  | [] => string
+  end.
+
+Fixpoint sprintf_ (f : format) (res : string) : sprintf_type f :=
   match f with
   | DLit a :: f' => sprintf_ f' (res ++ String a "")
   | DNum :: f' => fun A (H : InjTyp A Z) (x : A) => sprintf_ f' (res ++ show_zify x)
@@ -130,7 +130,7 @@ Fixpoint sprintf_ (f : format) (res : string) : format_type f :=
   | [] => res
   end.
 
-Definition sprintf (fmt : string) : format_type (parse_format fmt) :=
+Definition sprintf (fmt : string) : sprintf_type (parse_format fmt) :=
   sprintf_ (parse_format fmt) "".
 
 (* Needs arguments for type and prop: *)
@@ -164,14 +164,6 @@ Variant directive : Type :=
 
 Definition format : Type := list directive.
 
-Fixpoint format_type (f : format) : Type :=
-  match f with
-  | DLit _ :: f' => format_type f'
-  | DNum :: f' => printable_num -> format_type f'
-  | DString :: f' => printable_string -> format_type f'
-  | [] => string
-  end.
-
 Fixpoint parse_format (s : string) : format :=
   match s with
   | "%" ::: "d" ::: s' => DNum :: parse_format s'
@@ -180,7 +172,15 @@ Fixpoint parse_format (s : string) : format :=
   | "" => []
   end.
 
-Fixpoint sprintf_ (f : format) (res : string) : format_type f :=
+Fixpoint sprintf_type (f : format) : Type :=
+  match f with
+  | DLit _ :: f' => sprintf_type f'
+  | DNum :: f' => printable_num -> sprintf_type f'
+  | DString :: f' => printable_string -> sprintf_type f'
+  | [] => string
+  end.
+
+Fixpoint sprintf_ (f : format) (res : string) : sprintf_type f :=
   match f with
   | DLit a :: f' => sprintf_ f' (res ++ String a "")
   | DNum :: f' => fun x : printable_num => sprintf_ f' (res ++ show_Z x)
@@ -188,7 +188,7 @@ Fixpoint sprintf_ (f : format) (res : string) : format_type f :=
   | [] => res
   end.
 
-Definition sprintf (fmt : string) : format_type (parse_format fmt) :=
+Definition sprintf (fmt : string) : sprintf_type (parse_format fmt) :=
   sprintf_ (parse_format fmt) "".
 
 Compute sprintf "Hello, %s!" "world".
