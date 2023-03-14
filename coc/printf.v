@@ -42,7 +42,8 @@ Module LambdaInductive.
 (** * [sprintf] with arguments via lambdas and format parsed separately
 
     Idea from article “Type-safe printf in Coq” by Arthur Azevedo de Amorim in
-    2013 (http://poleiro.info/posts/2013-04-19-type-safe-printf-in-coq.html) *)
+    2013 (http://poleiro.info/posts/2013-04-19-type-safe-printf-in-coq.html),
+    which also has more features like handling parse errors. *)
 
 Variant directive : Type :=
   | DLit (a : ascii)
@@ -249,3 +250,9 @@ Variant printable : Type :=
 Arguments Printable {_} {_} _.
 
 End ShowCoercion.
+
+(** * [sprintf] and notations.
+
+    Gregory Malecha's coq-printf library (https://github.com/gmalecha/coq-printf)
+    also implements [sprintf] and represents format strings using the string
+    notations. *)
