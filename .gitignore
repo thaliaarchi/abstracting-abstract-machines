@@ -1,5 +1,7 @@
 *.pdf
 *.ps
+*.dot
+*.png
 
 # Coq
 *.vo
