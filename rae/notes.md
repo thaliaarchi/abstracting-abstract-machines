@@ -26,3 +26,28 @@ It states it in the context of Koka, but assume it in a wider sense.
 
 How do algebraic effects compare to typeclasses? Algebraic effects seem like
 typeclasses with dynamic, lexically-scoped instance resolution.
+
+Effect handlers allow for multiple resumptions and storing resumptions. It uses
+delimited continuations.
+
+## Discussion
+
+Relevant types would be useful to require that `resume`, the delimited
+continuation, must be called at least once.
+
+The Koka compiler only uses continuations for handlers that can be resumed more
+than once. Usually, it uses implicit function pointers, that are thread-local.
+
+### E
+
+Could algebraic effects supersume all algebraic data types? Yes. This is the
+data-codata duality.
+
+Declarative continuations and categorical duality
+Co-curring
+Same author did a regexp matcher
+
+Sum types are represented multiple by functions in the handler. Product types
+are represented by multiple parameters to a function.
+
+With continuations, you can express any monad.
