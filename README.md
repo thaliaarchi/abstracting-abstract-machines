@@ -31,3 +31,5 @@ Models](https://faculty.cs.byu.edu/~kimball/630/) in Coq and Rust.
   [arXiv](https://arxiv.org/abs/1908.05839)]
 - [lt](lt): Linear types can change the world! (Wadler 1990)
   [[ps](https://homepages.inf.ed.ac.uk/wadler/papers/linear/linear.ps)]
+- [rae](rae): Type directed compilation of row-typed algebraic effects (Leijen
+  2017) [[ACM](https://dl.acm.org/doi/10.1145/3009837.3009872)]
