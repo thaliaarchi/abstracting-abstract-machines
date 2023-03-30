@@ -16,7 +16,18 @@ The express refinement types with regular trees (i.e., the expressivity of
 regular expressions). Could refinement types potentially be written with
 push-down automata or Turing machines? It would probably be undecidable, though.
 
+Resolution: The benefit of using a regular language is the algorithms available
+to analyze it. If a non-regular language were used, then it wouldn't be
+decidable. Refinement-typed systems have no runtime overhead over equivalent
+systems without refinement types, but a non-regular language may incur
+additional residualization.
+
 ## Topic 2
 
 Refinement types in the paper focus on predicates over data. What about over
 codata or control flow?
+
+Resolution: You could express predicates over control flow, such as the
+algorithmic complexity, as over data. The problem is then how to ensure those
+additional variables are not residualized. The cost monad is one solution for
+this.
