@@ -14,4 +14,9 @@
 
 The express refinement types with regular trees (i.e., the expressivity of
 regular expressions). Could refinement types potentially be written with
-push-down automata or Turing machines? It would probably be unsound, though.
+push-down automata or Turing machines? It would probably be undecidable, though.
+
+## Topic 2
+
+Refinement types in the paper focus on predicates over data. What about over
+codata or control flow?
