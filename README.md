@@ -42,3 +42,6 @@ Models](https://faculty.cs.byu.edu/~kimball/630/) in Coq and Rust.
 - [rt](rt): Refinement types for ML
   (Tim Freeman and Frank Pfenning 1991)
   [[ACM](https://dl.acm.org/doi/10.1145/113446.113468)]
+- [cg](cg): Combinatory grammar and projection from the lexicon
+  (Anna Szabolcsi 1992)
+  [[Academia](https://www.academia.edu/24415928/Combinatory_grammar_and_projection_from_the_lexicon_1992)]
