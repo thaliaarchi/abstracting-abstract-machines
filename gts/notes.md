@@ -14,17 +14,13 @@ typestates.
 `OpenFile` and `ClosedFile` can easily be expressed with this pattern:
 
 ```rust
-// full OF
-type OpenFileOwned(File);
-// shared OF
-type OpenFileMut<'a>(&'a mut File);
-// pure OF
-type OpenFile<'a>(&'a File);
+type OpenFile(File);
+// OpenFile
+// &mut OpenFile
+// &OpenFile
 
-// full CF
-type ClosedFileOwned(PathBuf);
-// shared CF
-type ClosedFileMut<'a>(&'a mut PathBuf);
-// pure CF
-type ClosedFile<'a>(&'a PathBuf);
+type ClosedFile(PathBuf);
+// ClosedFile
+// &mut ClosedFile
+// &ClosedFile
 ```
