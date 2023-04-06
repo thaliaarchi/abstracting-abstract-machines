@@ -45,3 +45,7 @@ Models](https://faculty.cs.byu.edu/~kimball/630/) in Coq and Rust.
 - [cg](cg): Combinatory grammar and projection from the lexicon
   (Anna Szabolcsi 1992)
   [[Academia](https://www.academia.edu/24415928/Combinatory_grammar_and_projection_from_the_lexicon_1992)]
+- [gts](gts): Gradual typestate
+  (Roger Wolff, Ronald Garcia, Éric Tanter, and Jonathan Aldrich 2011)
+  [[Springer](https://link.springer.com/chapter/10.1007/978-3-642-22655-7_22)]
+  [[alternate](https://www.cs.cmu.edu/~aldrich/papers/aldrich-gradual-ecoop11.pdf)]
