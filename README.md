@@ -39,8 +39,7 @@ Models](https://faculty.cs.byu.edu/~kimball/630/) in Coq and Rust.
 - [rae](rae): Type directed compilation of row-typed algebraic effects
   (Dan Leijen 2017)
   [[ACM](https://dl.acm.org/doi/10.1145/3009837.3009872)]
-- [rt](rt): Refinement types for ML
-  (Tim Freeman and Frank Pfenning 1991)
+- [rt](rt): Refinement types for ML (Tim Freeman and Frank Pfenning 1991)
   [[ACM](https://dl.acm.org/doi/10.1145/113446.113468)]
 - [cg](cg): Combinatory grammar and projection from the lexicon
   (Anna Szabolcsi 1992)
