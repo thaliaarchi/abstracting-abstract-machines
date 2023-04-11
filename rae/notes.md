@@ -30,6 +30,9 @@ typeclasses with dynamic, lexically-scoped instance resolution.
 Effect handlers allow for multiple resumptions and storing resumptions. It uses
 delimited continuations.
 
+Algebraic effects are dynamically resolved, wrt the effect user, and lexically
+scoped, wrt the caller.
+
 ## Discussion
 
 Relevant types would be useful to require that `resume`, the delimited
@@ -43,9 +46,10 @@ than once. Usually, it uses implicit function pointers, that are thread-local.
 Could algebraic effects supersume all algebraic data types? Yes. This is the
 data-codata duality.
 
-Declarative continuations and categorical duality
-Co-curring
+Declarative Continuations and Categorical Duality
 Same author did a regexp matcher
+
+Co-currying: can partially apply a handler.
 
 Sum types are represented multiple by functions in the handler. Product types
 are represented by multiple parameters to a function.

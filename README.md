@@ -49,3 +49,7 @@ Models](https://faculty.cs.byu.edu/~kimball/630/) in Coq and Rust.
   (Roger Wolff, Ronald Garcia, Éric Tanter, and Jonathan Aldrich 2011)
   [[Springer](https://link.springer.com/chapter/10.1007/978-3-642-22655-7_22)]
   [[alternate](https://www.cs.cmu.edu/~aldrich/papers/aldrich-gradual-ecoop11.pdf)]
+- [gt](gt): Galois transformers and modular abstract interpreters
+  (David Darais, Matthew Might, David Van Horn, 2015)
+  [[ACM](https://dl.acm.org/doi/10.1145/2814270.2814308)]
+  [[arXiv](https://arxiv.org/abs/1411.3962)]
